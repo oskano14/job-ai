@@ -77,7 +77,7 @@ export const navItems: NavItem[] = [
   {
     key: "jobs",
     label: "Offres d'emploi",
-    description: "Cartes + compatibilité",
+    description: "Cartes (sans score)",
     icon: IconGrid,
   },
   {
@@ -87,4 +87,3 @@ export const navItems: NavItem[] = [
     icon: IconMic,
   },
 ];
-

@@ -1,11 +1,31 @@
-# AI Career Boost
+# job-ai (ALEX)
 
-Interface React (Vite + TypeScript) avec Tailwind CSS : Dashboard, Sidebar, et 3 sections (Analyse CV, Offres d'emploi, Simulateur d'entretien) en mode clair/sombre.
+MVP de coaching RH avec :
+- `frontend/` : React + Vite + TypeScript + Tailwind
+- `backend/` : FastAPI (audit CV + chat + jobs via SerpApi)
 
 ## Démarrer
 
+### Backend
+
 ```bash
+python -m venv backend/.venv
+./backend/.venv/Scripts/Activate.ps1
+pip install -r backend/requirements.txt
+uvicorn backend.main:app --reload --port 8000
+```
+
+Variables (ex: dans `backend/.env`) :
+- `GROQ_API_KEY` (obligatoire)
+- `SERPAPI_API_KEY` (obligatoire pour les offres)
+
+### Frontend
+
+```bash
+cd frontend
 npm install
 npm run dev
 ```
+
+Le front utilise un proxy Vite `/api` vers `http://localhost:8000`.
 

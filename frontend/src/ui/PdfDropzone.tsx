@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 
 export type PdfMeta = {
+  file: File;
   name: string;
   size: number;
   lastModified: number;
@@ -41,7 +42,12 @@ export default function PdfDropzone({ value, onChange }: Props) {
     (file: File | null | undefined) => {
       if (!file) return;
       if (file.type !== "application/pdf") return;
-      onChange({ name: file.name, size: file.size, lastModified: file.lastModified });
+      onChange({
+        file,
+        name: file.name,
+        size: file.size,
+        lastModified: file.lastModified,
+      });
     },
     [onChange],
   );
@@ -127,4 +133,3 @@ export default function PdfDropzone({ value, onChange }: Props) {
     </div>
   );
 }
-
