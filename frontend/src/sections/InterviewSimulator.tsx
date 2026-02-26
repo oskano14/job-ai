@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-
+import { AlexExplain } from "../components/illustration/alex_explain";
 type ChatMessage = {
   id: string;
   role: "user" | "assistant";
@@ -76,6 +76,32 @@ export default function InterviewSimulator() {
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/70 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/60">
+
+      <div className="flex flex-col items-center justify-center mb-8 pb-6 border-b border-slate-200 dark:border-slate-800 group">
+        {/* Effet carte premium */}
+        <div className="relative">
+          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition-all duration-500"></div>
+          <div className="relative bg-white/80 dark:bg-slate-900/80 p-6 rounded-3xl backdrop-blur-sm shadow-xl">
+            <AlexExplain
+              className="
+          w-56 md:w-64
+          drop-shadow-md
+          group-hover:drop-shadow-xl
+          transition-all 
+          duration-500 
+          ease-out
+        "
+            />
+          </div>
+        </div>
+        <h2 className="text-2xl font-bold mt-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+          Simulateur d'entretien
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+          Prépare-toi avec ALEX pour ton prochain entretien
+        </p>
+      </div>
+
       <div className="mb-3">
         <h2 className="text-base font-semibold tracking-tight">Simulateur d'entretien</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">{header}</p>

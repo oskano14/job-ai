@@ -1,3 +1,5 @@
+
+import { Alexupload } from "../components/illustration/alex_upload";
 export type Job = {
   title: string;
   company_name: string;
@@ -13,13 +15,29 @@ type Props = {
 export default function JobOffers({ jobs }: Props) {
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/70 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/60">
-      <div className="mb-3">
-        <div className="min-w-0">
-          <h2 className="text-base font-semibold tracking-tight">Offres d'emploi</h2>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Grille de suggestions (sans score pour l’instant).
-          </p>
-        </div>
+      <div className="flex flex-col items-center justify-center mb-8 pb-6 border-b border-slate-200 dark:border-slate-800 group">
+        {/* Effet nuage / tech */}
+        <div className="absolute w-80 h-80 bg-indigo-600/5 rounded-full blur-3xl -z-10 group-hover:bg-indigo-600/10 transition-all duration-700"></div>
+
+        <Alexupload
+          className="
+      w-56 md:w-64
+      drop-shadow-lg
+      group-hover:drop-shadow-2xl
+      group-hover:scale-105 
+      group-hover:-translate-y-1
+      transition-all 
+      duration-500 
+      ease-out
+    "
+        />
+
+        <h2 className="text-2xl font-bold mt-6 bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+          Offres d'emploi
+        </h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+          {jobs.length === 0 ? "Recherche d'offres en cours..." : `${jobs.length} offres trouvées`}
+        </p>
       </div>
 
       {!jobs.length ? (

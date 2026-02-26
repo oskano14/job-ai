@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import PdfDropzone, { type PdfMeta } from "../ui/PdfDropzone";
 import type { Job } from "./JobOffers";
+import { AlexCV } from "../components/illustration/alex_cv"; // <-- IMPORT OK
 
 function getApiBase(): string {
   const raw = import.meta.env.VITE_API_BASE_URL ?? "/api";
@@ -51,8 +52,6 @@ export default function CvAnalysis({ onJobsLoaded, onOpenJobs }: Props) {
     return () => controller.abort();
   }, []);
 
-  // Note: pas de polling ici (pour éviter de bloquer l’UI).
-
   async function runAnalysis() {
     if (!pdf) return;
     const apiBase = getApiBase();
@@ -78,11 +77,11 @@ export default function CvAnalysis({ onJobsLoaded, onOpenJobs }: Props) {
 
       const data = (await res.json().catch(() => null)) as
         | {
-            audit_markdown?: string;
-            cv_context?: string;
-            jobs_keyword?: string;
-            detail?: string;
-          }
+          audit_markdown?: string;
+          cv_context?: string;
+          jobs_keyword?: string;
+          detail?: string;
+        }
         | null;
 
       if (!res.ok) {
@@ -219,6 +218,26 @@ export default function CvAnalysis({ onJobsLoaded, onOpenJobs }: Props) {
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/70 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/60">
+
+      {/* ✅ ICI ON AJOUTE L'IMAGE ALEX */}
+      <div className="flex flex-col items-center justify-center mb-8 pb-6 border-b border-slate-200 dark:border-slate-800 group">
+        <div className="absolute w-72 h-72 bg-blue-600/5 rounded-full blur-3xl -z-10"></div>
+        <AlexCV
+          className="
+      w-56 md:w-64
+      drop-shadow-lg
+      group-hover:drop-shadow-2xl
+      group-hover:scale-105
+      transition-all 
+      duration-500 
+      ease-out
+    "
+        />
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-4">
+          Dépose ton CV pour commencer l'analyse
+        </p>
+      </div>
+
       <div className="mb-3">
         <h2 className="text-base font-semibold tracking-tight">Analyse CV</h2>
         <p className="text-sm text-slate-600 dark:text-slate-300">{helper}</p>
