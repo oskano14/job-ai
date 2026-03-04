@@ -39,7 +39,7 @@ export default function DashboardLayout({
                 Menu
               </button>
               <h1 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-50">
-                AI Career Boost
+                AI Career Boost (ALEX)
               </h1>
               <p className="text-sm text-slate-600 dark:text-slate-300">
                 Dashboard de coaching emploi
