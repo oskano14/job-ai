@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-
+from .securiter import  securite_prompt
 import httpx
 
 
@@ -67,27 +67,26 @@ async def _groq_chat(messages: list[dict[str, str]], *, max_tokens: int) -> str:
 
 
 def _build_prompt(cv_text: str) -> list[dict[str, str]]:
+    
     system = (
         "Tu es ALEX, un coach RH senior spécialisé en recrutement et optimisation de CV. "
         "Personnalité: expert RH au teint ébène, lunettes et petit afro. "
         "Ton: bienveillant, direct, très concret. Langue: français. "
-        "Tu rédiges toujours en Markdown."
+        "IMPORTANT: Ne rédige PAS en Markdown. Utilise uniquement du texte brut (Plain Text). "
+        "N'utilise pas de symboles comme #, *, ou __ pour la mise en forme."
         "\n\n"
         "Objectif: auditer le CV fourni et proposer des améliorations actionnables."
         "\n\n"
-        "Contraintes de format (obligatoires):\n"
-        "1) Réponds exclusivement en Markdown.\n"
-        "2) Structure exactement en 3 sections avec ces titres (dans cet ordre):\n"
-        "   # ✅ Points Forts\n"
-        "   # ⚠️ Points d'Amélioration\n"
-        "   # 🚀 Suggestions de Reformulation\n"
-        "3) Sois spécifique: cite des exemples concrets, propose des reformulations prêtes à copier-coller.\n"
-        "4) Si le CV manque d'informations, liste les questions à poser au candidat.\n"
-        "5) Ne divulgue aucune clé API, ni informations techniques internes.\n"
+        "Structure ton texte clairement avec des sauts de lignes entre ces 3 sections :\n"
+        "SECTION 1 : POINTS FORTS\n"
+        "SECTION 2 : POINTS D'AMELIORATION\n"
+        "SECTION 3 : SUGGESTIONS DE REFORMULATION\n"
+        "\n"
+        "Sois spécifique et propose des exemples de texte que le candidat peut copier-coller."
     )
 
     user = (
-        "Voici le texte extrait du CV (brut). Fais l'audit complet demandé:\n\n"
+        "Voici le texte du CV. Analyse-le et fournis l'audit en texte brut uniquement :\n\n"
         "-----\n"
         f"{cv_text}\n"
         "-----\n"
@@ -98,15 +97,17 @@ def _build_prompt(cv_text: str) -> list[dict[str, str]]:
         {"role": "user", "content": user},
     ]
 
-
 async def generate_audit_markdown(cv_text: str) -> str:
     max_chars = int(os.environ.get("ALEX_MAX_CHARS", "24000"))
     clipped = _clip_text(cv_text, max_chars)
     if not clipped:
         raise ValueError("Texte CV vide après extraction.")
+    
+    # --- AJOUT SÉCURITÉ SUR LE CV ---
+    if not await securite_prompt(clipped):
+         return "Désolé, le contenu de ce CV a été bloqué par notre système de sécurité."
 
     return await _groq_chat(_build_prompt(clipped), max_tokens=2048)
-
 
 async def chat_with_alex(
     prompt: str,
@@ -118,6 +119,10 @@ async def chat_with_alex(
     if not prompt:
         raise ValueError("Message vide.")
 
+   # --- ÉTAPE DE SÉCURITÉ CORRIGÉE ---
+    # On utilise 'prompt' au lieu de 'user_query'
+    if not await securite_prompt(prompt):
+        return "⚠️ **ALEX :** Désolé, je ne peux pas répondre à cette demande car elle semble sortir de mon cadre de coach RH."
     max_cv_chars = int(os.environ.get("ALEX_CHAT_CV_MAX_CHARS", "24000"))
     cv_clipped = _clip_text(cv_text, max_cv_chars)
     if not cv_clipped:

@@ -127,9 +127,6 @@ export default function PdfDropzone({ value, onChange }: Props) {
         onChange={(e) => acceptFile(e.target.files?.[0])}
       />
 
-      <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-        Note : cette UI prépare l’intégration (analyse OCR/LLM) côté backend.
-      </div>
     </div>
   );
 }

@@ -1,210 +1,67 @@
-import { useMemo, useState } from "react";
 import { AlexExplain } from "../components/illustration/alex_explain";
-type ChatMessage = {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  at: Date;
-};
-
-function uuid() {
-  return Math.random().toString(16).slice(2) + Date.now().toString(16);
-}
-
-function formatTime(d: Date) {
-  return d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
-}
-
-function MicIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-      <path d="M12 19v4" />
-      <path d="M8 23h8" />
-    </svg>
-  );
-}
 
 export default function InterviewSimulator() {
-  const [listening, setListening] = useState(false);
-  const [draft, setDraft] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: uuid(),
-      role: "assistant",
-      content:
-        "Bonjour ! Je suis votre coach. Dites-moi le poste visé et je lance une simulation d’entretien.",
-      at: new Date(),
-    },
-  ]);
-
-  const header = useMemo(
-    () =>
-      listening
-        ? "Micro actif — parlez naturellement."
-        : "Interface minimaliste — micro central + chat.",
-    [listening],
-  );
-
-  function send() {
-    const value = draft.trim();
-    if (!value) return;
-    const now = new Date();
-    setMessages((prev) => [
-      ...prev,
-      { id: uuid(), role: "user", content: value, at: now },
-      {
-        id: uuid(),
-        role: "assistant",
-        content:
-          "Reçu. Je vais vous poser une première question : présentez-vous en 60 secondes, en mettant l’accent sur votre impact.",
-        at: new Date(now.getTime() + 250),
-      },
-    ]);
-    setDraft("");
-  }
-
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white/70 p-4 backdrop-blur dark:border-slate-800 dark:bg-slate-900/60">
+    <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white/70 p-8 backdrop-blur dark:border-slate-800 dark:bg-slate-900/60 min-h-[600px] flex flex-col items-center justify-center">
+      
+      {/* Effets de lumière en arrière-plan */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-      <div className="flex flex-col items-center justify-center mb-8 pb-6 border-b border-slate-200 dark:border-slate-800 group">
-        {/* Effet carte premium */}
-        <div className="relative">
-          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl blur opacity-20 group-hover:opacity-30 transition-all duration-500"></div>
-          <div className="relative bg-white/80 dark:bg-slate-900/80 p-6 rounded-3xl backdrop-blur-sm shadow-xl">
+      <div className="relative flex flex-col items-center justify-center group z-10">
+        
+        {/* Illustration ALEX avec effet de flottement */}
+        <div className="relative mb-12 animate-bounce-slow">
+          <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full blur-2xl opacity-10 group-hover:opacity-20 transition-opacity duration-700"></div>
+          <div className="relative bg-white/40 dark:bg-slate-800/40 p-8 rounded-full backdrop-blur-md border border-white/20 dark:border-slate-700/50 shadow-2xl">
             <AlexExplain
-              className="
-          w-56 md:w-64
-          drop-shadow-md
-          group-hover:drop-shadow-xl
-          transition-all 
-          duration-500 
-          ease-out
-        "
+              className="w-48 md:w-56 drop-shadow-2xl transition-transform duration-700 ease-out group-hover:scale-105"
             />
           </div>
         </div>
-        <h2 className="text-2xl font-bold mt-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-          Simulateur d'entretien
-        </h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-          Prépare-toi avec ALEX pour ton prochain entretien
-        </p>
-      </div>
 
-      <div className="mb-3">
-        <h2 className="text-base font-semibold tracking-tight">Simulateur d'entretien</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-300">{header}</p>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-[360px_1fr]">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950/30">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
-              Micro
-            </div>
-            <span
-              className={[
-                "rounded-full px-2 py-1 text-xs font-semibold",
-                listening
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200",
-              ].join(" ")}
-            >
-              {listening ? "ON" : "OFF"}
+        {/* Contenu textuel */}
+        <div className="text-center max-w-lg">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold tracking-widest uppercase mb-6 animate-pulse">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
+            Nouvelle Feature
           </div>
 
-          <div className="mt-4 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={() => setListening((v) => !v)}
-              className={[
-                "relative flex h-24 w-24 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm transition",
-                "hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-600/30",
-                listening ? "shadow-glow" : "",
-              ].join(" ")}
-              aria-label={listening ? "Désactiver le micro" : "Activer le micro"}
-            >
-              <MicIcon className="h-10 w-10" />
-              {listening ? (
-                <span className="pointer-events-none absolute -inset-4 animate-pulse rounded-full border border-blue-600/30" />
-              ) : null}
-            </button>
-          </div>
+          <h2 className="text-4xl md:text-5xl font-black mb-6 tracking-tight text-slate-900 dark:text-white">
+            Simulateur d'entretien <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">
+              Bientôt disponible
+            </span>
+          </h2>
 
-          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-slate-300">
-            Conseil : entraînez-vous à répondre avec structure (Contexte → Actions → Résultats).
-          </div>
-        </div>
+          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed mb-10">
+            ALEX s'entraîne encore un peu pour vous offrir une expérience vocale ultra-réaliste. Préparez-vous à simuler vos entretiens avec une IA qui analyse votre ton, votre structure et votre impact.
+          </p>
 
-        <div className="flex min-h-[420px] flex-col rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950/30">
-          <div className="border-b border-slate-200 px-4 py-3 text-sm font-semibold text-slate-900 dark:border-slate-800 dark:text-slate-50">
-            Chat
+          {/* Barre de progression fictive */}
+          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-4">
+            <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 w-[85%] rounded-full shadow-[0_0_12px_rgba(37,99,235,0.4)]"></div>
           </div>
-          <div className="flex-1 space-y-3 overflow-auto p-4">
-            {messages.map((m) => {
-              const isUser = m.role === "user";
-              return (
-                <div key={m.id} className={isUser ? "flex justify-end" : "flex justify-start"}>
-                  <div
-                    className={[
-                      "max-w-[75%] rounded-2xl px-3 py-2 text-sm shadow-sm",
-                      isUser
-                        ? "bg-blue-600 text-white"
-                        : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-50",
-                    ].join(" ")}
-                  >
-                    <div className="whitespace-pre-wrap">{m.content}</div>
-                    <div
-                      className={[
-                        "mt-1 text-[11px]",
-                        isUser ? "text-blue-50/90" : "text-slate-500 dark:text-slate-400",
-                      ].join(" ")}
-                    >
-                      {formatTime(m.at)}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="border-t border-slate-200 p-3 dark:border-slate-800">
-            <div className="flex gap-2">
-              <input
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") send();
-                }}
-                className="flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 outline-none ring-blue-600/20 focus:ring-4 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50"
-                placeholder="Écrivez votre réponse…"
-              />
-              <button
-                type="button"
-                onClick={send}
-                className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
-              >
-                Envoyer
-              </button>
-            </div>
-            <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-              Astuce : appuyez sur Entrée pour envoyer.
-            </div>
+          <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <span>Développement</span>
+            <span>85% Terminé</span>
           </div>
         </div>
       </div>
+
+      {/* Style additionnel pour l'animation de flottement */}
+      <style>{`
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 4s ease-in-out infinite;
+        }
+      `}</style>
     </section>
   );
 }
-

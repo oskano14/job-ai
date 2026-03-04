@@ -33,34 +33,35 @@ def _extract_job_link(job: dict[str, Any]) -> str:
     return ""
 
 
-async def get_google_jobs(query: str) -> list[dict[str, str | None]]:
+async def get_google_jobs(query: str, location: str = "France", contract_type: str = None) -> list[dict[str, str | None]]:
     """
-    SerpApi -> engine=google_jobs
-
-    Retourne uniquement:
-      - title
-      - company_name
-      - location
-      - thumbnail
+    Paramètres ajoutés :
+    - location : Ville ou région
+    - contract_type : CDI, Stage, Alternance, etc.
     """
     query = (query or "").strip()
     if not query:
         return []
 
+    # On enrichit la requête avec le type de contrat si présent
+    full_query = query
+    if contract_type:
+        full_query += f" {contract_type}"
+
     api_key = os.environ.get("SERPAPI_API_KEY")
     if not api_key:
-        raise RuntimeError("SERPAPI_API_KEY manquant (variable d'environnement).")
+        raise RuntimeError("SERPAPI_API_KEY manquant.")
 
     params = {
         "engine": "google_jobs",
-        "q": query,
+        "q": full_query,
         "api_key": api_key,
-        # Defaults adaptés au marché FR (override via env si besoin)
-        "hl": os.environ.get("SERPAPI_HL", "fr"),
-        "gl": os.environ.get("SERPAPI_GL", "fr"),
-        # Paramètres explicites demandés
-        "location": os.environ.get("SERPAPI_LOCATION", "France"),
+        "hl": "fr",
+        "gl": "fr",
+        "location": location, # Utilisation de la localisation dynamique
     }
+    
+    # ... reste du code httpx inchangé ...
 
     timeout_s = float(os.environ.get("SERPAPI_TIMEOUT_S", "30"))
     async with httpx.AsyncClient(timeout=timeout_s) as client:
