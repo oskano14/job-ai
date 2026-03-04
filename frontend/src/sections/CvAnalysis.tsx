@@ -134,7 +134,7 @@ export default function CvAnalysis({ onJobsLoaded, onOpenJobs }: Props) {
     <section className="rounded-2xl border border-slate-200 bg-white/70 p-4 dark:border-slate-800 dark:bg-slate-900/60">
       <div className="flex flex-col items-center mb-4 border-b pb-4 dark:border-slate-800">
         <AlexCV className="w-40 md:w-48 drop-shadow-lg" />
-        <h2 className="text-lg font-bold mt-2">AI Career Boost</h2>
+        <h2 className="text-lg font-bold mt-2">AI Alex</h2>
       </div>
 
       <div className="mb-4">
